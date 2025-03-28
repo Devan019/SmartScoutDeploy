@@ -1,0 +1,127 @@
+{% extends 'index.html' %}
+
+{% block content %}
+  <div class="relative min-h-screen">
+    <div class="main">
+      <!-- navbar -->
+      <nav class="bg-[#23153C] text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="flex justify-between items-center h-16">
+            <!-- Logo Section -->
+            <div class="flex-shrink-0">
+              <a href="#" class="text-2xl font-bold text-blue-400">SmartRecruit</a>
+            </div>
+
+            <!-- Navigation Links -->
+            <div class="hidden md:flex space-x-4">
+              <a href="{% url 'home' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+              <a href="#benefits" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+              {% if user.is_authenticated %}
+                {% if user.role == 'employee' %}
+                  <a href="{% url 'employee:home' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">{{ user.username }}</a>
+                {% endif %}
+                {% if user.role == 'manager' %}
+                  <a href="{% url 'manager:home' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">{{ user.username }}</a>
+                {% endif %}
+                {% if user.role == 'admin' %}
+                  <a href="{% url 'admin:home' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">{{ user.username }}</a>
+                {% endif %}
+                <a href="{% url 'myauth:logout' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+              {% else %}
+                <a href="{% url 'myauth:login' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Login</a>
+                <a href="{% url 'myauth:signup' %}" class="hover:text-blue-400 px-3 py-2 rounded-md text-sm font-medium">Signup</a>
+              {% endif %}
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <div class="md:hidden">
+              <button id="mobile-menu-button" class="text-gray-400 hover:text-white focus:outline-none">
+                <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden">
+          <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="{% url 'home' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:text-blue-400">Home</a>
+            <a href="{% url 'myauth:login' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:text-blue-400">Login</a>
+            <a href="{% url 'myauth:signup' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:text-blue-400">Signup</a>
+          </div>
+        </div>
+      </nav>
+
+      <script>
+        // Toggle Mobile Menu
+        document.getElementById('mobile-menu-button').addEventListener('click', () => {
+          const mobileMenu = document.getElementById('mobile-menu')
+          mobileMenu.classList.toggle('hidden')
+        })
+      </script>
+
+      <!-- 3d -->
+
+      <div class="sub-main relative z-10">
+        <div class="blob-page w-full h-screen relative z-0">
+          <h1 class="text-4xl top-1/4 w-[350px] left-[100px] text-white absolute z-30">Smart Recruitment And Employee Management System</h1>
+        </div>
+      </div>
+
+      <!-- techs -->
+      {% include 'include/techstack.html' %}
+
+      <!-- beniftis -->
+      <section id="benefits" class="relative z-10 py-20 bg-white dark:bg-zinc-900 min-h-screen">
+        <div class="max-w-7xl mx-auto text-center">
+          <h2 class="text-4xl font-bold text-gray-800 dark:text-gray-100 mb-10">Why Choose Our System?</h2>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <!-- Benefit 1 -->
+            <div class="bg-gradient-to-tr from-green-400 to-blue-400 text-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
+              <div class="text-5xl mb-4">👥</div>
+              <h3 class="text-2xl font-bold mb-4">Effortless Recruitment</h3>
+              <p>Find the best candidates quickly with automated job postings and resume screening.</p>
+            </div>
+            <!-- Benefit 2 -->
+            <div class="bg-gradient-to-tr from-purple-400 to-pink-400 text-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
+              <div class="text-5xl mb-4">⚙️</div>
+              <h3 class="text-2xl font-bold mb-4">Employee Management</h3>
+              <p>Streamline employee onboarding, tracking, and performance evaluation in one place.</p>
+            </div>
+            <!-- Benefit 3 -->
+            <div class="bg-gradient-to-tr from-yellow-400 to-red-400 text-white p-10 rounded-xl shadow-lg hover:shadow-2xl transition-transform transform hover:scale-105">
+              <div class="text-5xl mb-4">📊</div>
+              <h3 class="text-2xl font-bold mb-4">Data-Driven Insights</h3>
+              <p>Make smarter decisions with real-time data analytics on team performance and recruitment trends.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="-translate-x-1/2 left-1/2 absolute lg:bottom-1/4 bottom-[20px]">
+          <a href="#get-started" class="px-8 py-3 text-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-purple-500 rounded-full shadow-lg hover:shadow-2xl hover:from-purple-500 hover:to-blue-500 focus:outline-none focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 transition-transform transform hover:scale-105">Get Started</a>
+        </div>
+      </section>
+
+      <!-- footer -->
+      {% include 'include/footer.html' %}
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vanta/0.5.24/vanta.globe.min.js"></script>
+
+  <script>
+    VANTA.GLOBE({
+      el: '.blob-page',
+      mouseControls: true,
+      touchControls: true,
+      gyroControls: false,
+      minHeight: 200.0,
+      minWidth: 200.0,
+      scale: 1.0,
+      scaleMobile: 1.0
+    })
+  </script>
+{% endblock %}
