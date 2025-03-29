@@ -15,17 +15,22 @@ class Status(models.TextChoices):
     ACTIVE = "True", "Active"
     INACTIVE = "False", "Inactive"
 
+from django.db import models
+from myadmin.models import Manager  # ✅ Safe import
+
 class RecruitmentModel(models.Model):
-    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name="recruitments",blank=True, null=True)
+    manager = models.ForeignKey(Manager, on_delete=models.CASCADE, related_name="recruitments", blank=True, null=True)
     job_details = models.TextField(blank=False, null=False)
-    skills_required = models.JSONField(default=list,validators=[validate_non_empty_list])
+    skills_required = models.JSONField(default=list)
     expected_salary = models.IntegerField(blank=False, null=False)
     minimum_experience = models.IntegerField(blank=False, null=False)
-    form_status = models.BooleanField(default=Status.ACTIVE,blank=True, null=True)
-    creation_date = models.DateField(auto_now_add=True,blank=True, null=True)
-    mailSent=models.BooleanField(default=False,null=True,blank=True)
+    form_status = models.BooleanField(default=True, blank=True, null=True)
+    creation_date = models.DateField(auto_now_add=True, blank=True, null=True)
+    mailSent = models.BooleanField(default=False, null=True, blank=True)
+
     def __str__(self):
-        return str(self.id )+ ' ' +self.job_details
+        return f"{self.id} - {self.job_details}"
+
     
 class EmployeeModel(models.Model):
     EMPLOYEE_TYPES = (
@@ -35,18 +40,15 @@ class EmployeeModel(models.Model):
         ('TL', 'Team Lead'),
         ('MGR', 'Manager'),
     )
-    
-    profile = models.OneToOneField(Profile, on_delete=models.CASCADE)
-    position = models.CharField(max_length=100)
+
+    manager = models.OneToOneField(Manager, on_delete=models.CASCADE, related_name="employee_manager")
+    profile = models.OneToOneField("employee.Profile", on_delete=models.CASCADE, related_name="employee_profile", blank=True, null=True)  # ✅ String reference
     experience = models.PositiveIntegerField(help_text="Years of experience")
     employee_type = models.CharField(max_length=3, choices=EMPLOYEE_TYPES)
     salary_lpa = models.DecimalField(max_digits=5, decimal_places=2, verbose_name="Salary (LPA)")
     is_accepted = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    
+
     def __str__(self):
-        return f"{self.user.get_full_name()} - {self.position}"
-    
-    class Meta:
-        ordering = ['-created_at']
+        return f"{self.manager} - {self.employee_type}"
